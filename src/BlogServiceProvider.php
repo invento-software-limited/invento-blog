@@ -33,7 +33,7 @@ class BlogServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'blog');
 
         $this->publishes([
-            __DIR__ . '/../migrations/2024_04_26_105140_create_blogs_table.php' => database_path('migrations/' . date('Y_m_d_His') . '_create_blogs_table.php')
+            __DIR__ . '/../migrations/2024_04_26_105140_create_blogs_table.php' => database_path('migrations/' .'2024_04_26_105140_create_blogs_table.php')
         ], 'blog-migrations');
 
         $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');

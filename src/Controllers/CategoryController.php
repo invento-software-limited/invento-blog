@@ -15,6 +15,13 @@ use App\Services\CustomFieldService;
 
 class CategoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['permission:view blog categories'])->only(['index']);
+        $this->middleware(['permission:add and update blog category'])->only(['create','store','edit','update']);
+        $this->middleware(['permission:delete blog category'])->only(['destroy']);
+    }
+
     public function index()
     {
         $data['categories'] = Category::query()

@@ -2,7 +2,9 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Spatie\Permission\Models\Permission;
 
 return new class extends Migration
 {
@@ -47,6 +49,23 @@ return new class extends Migration
             $table->softDeletes();
             $table->timestamps();
         });
+
+        // Insert permissions for the blog module
+        $permissions_list = [
+            'manage blog' => ['view blogs','add and update blog','delete blog','view blog categories','add and update blog category','delete blog category']
+        ];
+
+        foreach ($permissions_list as $key => $permissions) {
+            foreach ($permissions as $permission) {
+                Permission::create([
+                    'name' => $permission,
+                    'prefix' => $key,
+                    'guard_name' => 'web',
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        }
     }
 
     /**
@@ -58,5 +77,10 @@ return new class extends Migration
     {
         Schema::dropIfExists('blogs');
         Schema::dropIfExists('blog_categories');
+
+        $permissions =  DB::table('permissions')->where('prefix', 'manage blogs')->pluck('id')->toArray();
+        DB::table('role_has_permissions')->whereIn('permission_id', $permissions)->delete();
+        DB::table('model_has_permissions')->whereIn('permission_id', $permissions)->delete();
+        DB::table('permissions')->whereIn('id', $permissions)->delete();
     }
 };

@@ -19,6 +19,13 @@ use Brian2694\Toastr\Facades\Toastr;
 class BlogController extends Controller
 {
 
+    public function __construct()
+    {
+        $this->middleware(['permission:view blogs'])->only(['index']);
+        $this->middleware(['permission:add and update blog'])->only(['create','store','edit','update']);
+        $this->middleware(['permission:delete blog'])->only(['destroy']);
+    }
+    
     public function index()
     {
         $data['blogs'] = Blog::query()
