@@ -5,6 +5,7 @@ namespace Invento\Blog\Models;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
@@ -110,5 +111,10 @@ class Blog extends Model
         return $builder->where('id', "{$searchItem}%")
             ->orWhere('title', 'LIKE', "{$searchItem}%")
             ->orWhere('short_description', 'LIKE', "{$searchItem}%");
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'blog_category_id');
     }
 }

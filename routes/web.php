@@ -18,3 +18,4 @@ Route::group(['middleware' => ['check.banned.ip','throttle:40,1','web', 'auth'],
     Route::resource('blogs', BlogController::class);
 
 });
+
