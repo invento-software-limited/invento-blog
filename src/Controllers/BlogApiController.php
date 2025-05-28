@@ -15,8 +15,7 @@ class BlogApiController extends Controller
     {
         // Eager load category to prevent N+1 issues if you access it in the resource
         $blogs = Blog::with('category')->where('status', true)->orderBy('display_order')->paginate(10);
-        return BlogResource::collection($blogs);
-
+ 
         $blogs->through(function ($blog) {
             return new BlogResource($blog);
         });
@@ -29,9 +28,9 @@ class BlogApiController extends Controller
         );
     }
 
-    public function show($slug)
+    public function show($id)
     {
-        $blog = Blog::with('category')->where('slug', $slug)->where('status', true)->first();
+        $blog = Blog::with('category')->where('id', $id)->where('status', true)->first();
 
         if($blog){
             return ApiResponse::success(
@@ -51,7 +50,7 @@ class BlogApiController extends Controller
         $categories = Category::where('status', true)->orderBy('display_order')->get();
         return ApiResponse::success(
             CategoryResource::collection($categories),
-            'Blog Post retrieved successfully.',
+            'Blog Categories retrieved successfully.',
             200
         );;
 
